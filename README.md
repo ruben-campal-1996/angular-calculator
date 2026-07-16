@@ -2,7 +2,7 @@
 
 ## Stack Tecnológico
 
-* Framework: VUE 3
+* Framework: Angular
 * Llamadas API: Axios
 * LocalStorage: Pinia
 * Test unitarios: Vitest y e2e Playwright
