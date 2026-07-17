@@ -42,3 +42,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+##IA folders
+.agents/
+.codex/
+.continue/
+.github/
+LLM_SETUP.md
+AGENTS.md
