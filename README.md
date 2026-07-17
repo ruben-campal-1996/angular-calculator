@@ -61,6 +61,13 @@ Se deberá realizar la aplicación con Vue 3, para los test unitarios Vitest  y 
 
 **Nota:** Todos los elementos deberían estar presentes en una sola vista.
 
+## Herramientas de desarrollo asistido por IA
+
+Este proyecto incluye guardarraíles y prompts para asistentes de código (Codex, GitHub
+Copilot, Continue + Ollama). Convenciones completas en [`AGENTS.md`](./AGENTS.md); guía de
+instalación/activación por herramienta en [`docs/LLM_SETUP.md`](./docs/LLM_SETUP.md).
+
+
 ## Entregables:
 Enlace al repositorio de GitHub
 Enlace a la aplicación desplegada en GitHub Pages
