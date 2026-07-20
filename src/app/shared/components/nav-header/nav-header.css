@@ -1,0 +1,27 @@
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+}
+
+.site-nav__link {
+  text-decoration: none;
+  color: var(--neutral-color-200);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.03em;
+  transition: color 0.2s ease;
+}
+
+.site-nav__link:hover,
+.site-nav__link:focus-visible {
+  color: var(--primary-color-200);
+  outline: none;
+}
+
+.site-nav__link:focus-visible {
+  outline: 2px solid var(--primary-color-300);
+  outline-offset: 3px;
+  border-radius: 2px;
+}

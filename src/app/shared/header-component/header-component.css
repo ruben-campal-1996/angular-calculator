@@ -1,0 +1,10 @@
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1rem;
+  padding: 0 2rem;
+  height: 4rem;
+  background-color: var(--neutral-color-900);
+  border-bottom: 1px solid var(--neutral-color-700);
+}
