@@ -1,1 +1,67 @@
-<p>conversor works!</p>
+<section class="conversor" aria-label="Conversor de divisas">
+  <h2 class="title">Conversor de divisas</h2>
+
+  @if (loading()) {
+    <p class="status" role="status">Cargando tasas de cambio...</p>
+  }
+
+  @if (errorMessage(); as message) {
+    <p class="status status-error" role="alert">{{ message }}</p>
+  }
+
+  <div class="field">
+    <label for="amount">Cantidad</label>
+    <input
+      id="amount"
+      type="number"
+      class="amount-input"
+      [value]="amount()"
+      (input)="onAmountChange($any($event.target).value)"
+    />
+  </div>
+
+  <div class="currencies">
+    <div class="field">
+      <label for="from-currency">De</label>
+      <select
+        id="from-currency"
+        [value]="fromCurrency()"
+        (change)="onFromCurrencyChange($any($event.target).value)"
+      >
+        @for (currency of currencies; track currency) {
+          <option [value]="currency">{{ currency }}</option>
+        }
+      </select>
+    </div>
+
+    <button
+      type="button"
+      class="swap-button"
+      aria-label="Intercambiar divisas"
+      (click)="swapCurrencies()"
+    >
+      ⇄
+    </button>
+
+    <div class="field">
+      <label for="to-currency">A</label>
+      <select
+        id="to-currency"
+        [value]="toCurrency()"
+        (change)="onToCurrencyChange($any($event.target).value)"
+      >
+        @for (currency of currencies; track currency) {
+          <option [value]="currency">{{ currency }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <p class="result" role="status" aria-live="polite">
+    @if (convertedAmount() !== null) {
+      {{ amount() }} {{ fromCurrency() }} = {{ convertedAmount() | number: '1.2-2' }} {{ toCurrency() }}
+    } @else {
+      —
+    }
+  </p>
+</section>
