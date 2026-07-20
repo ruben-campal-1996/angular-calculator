@@ -1,5 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { WeatherService } from '../../../../shared/services/weather/weather';
 import { getSkyIconPath } from '../../../../shared/utils/sky-icon';
@@ -25,6 +25,12 @@ export class WeatherView implements OnInit {
   protected readonly errorMessage = this.weatherService.errorMessage;
 
   protected readonly getSkyIconPath = getSkyIconPath;
+
+  protected readonly activeCities = computed(() =>
+    this.mode() === 'provincia'
+      ? (this.provinceForecast()?.cities ?? [])
+      : (this.nationalForecast()?.cities ?? []),
+  );
 
   ngOnInit(): void {
     this.weatherService.loadProvinces();

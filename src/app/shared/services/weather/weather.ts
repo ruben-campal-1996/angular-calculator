@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 
 import { environment } from '../../../../environments/environment';
+import { fixMojibake } from '../../utils/fix-mojibake';
 
 export interface Province {
   codProv: string;
@@ -26,26 +27,40 @@ export interface ProvinceForecast {
 export interface NationalForecast {
   elaborado: string;
   paragraphs: string[];
+  cities: CityForecast[];
 }
 
 interface ProvinciasResponse {
   provincias: { CODPROV: string; NOMBRE_PROVINCIA: string }[];
 }
 
+interface CiudadResponse {
+  name: string;
+  stateSky: { id: string; description: string };
+  temperatures: { max: string; min: string };
+}
+
 interface ProvinciaForecastResponse {
   today: { p: string };
   tomorrow: { p: string };
   provincia: { NOMBRE_PROVINCIA: string };
-  ciudades: {
-    name: string;
-    stateSky: { id: string; description: string };
-    temperatures: { max: string; min: string };
-  }[];
+  ciudades: CiudadResponse[];
 }
 
 interface NacionalResponse {
   elaborado: string;
   descripcion_prediccion: { p: string[] };
+  ciudades: CiudadResponse[];
+}
+
+function toCityForecast(ciudad: CiudadResponse): CityForecast {
+  return {
+    name: ciudad.name,
+    skyDescription: ciudad.stateSky.description,
+    skyId: ciudad.stateSky.id,
+    temperatureMax: ciudad.temperatures.max,
+    temperatureMin: ciudad.temperatures.min,
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -92,15 +107,9 @@ export class WeatherService {
       next: (response) => {
         this.provinceForecastState.set({
           provinceName: response.provincia.NOMBRE_PROVINCIA,
-          today: response.today.p,
-          tomorrow: response.tomorrow.p,
-          cities: response.ciudades.map((ciudad) => ({
-            name: ciudad.name,
-            skyDescription: ciudad.stateSky.description,
-            skyId: ciudad.stateSky.id,
-            temperatureMax: ciudad.temperatures.max,
-            temperatureMin: ciudad.temperatures.min,
-          })),
+          today: fixMojibake(response.today.p),
+          tomorrow: fixMojibake(response.tomorrow.p),
+          cities: response.ciudades.map(toCityForecast),
         });
         this.loading.set(false);
       },
@@ -123,7 +132,8 @@ export class WeatherService {
       next: (response) => {
         this.nationalForecastState.set({
           elaborado: response.elaborado,
-          paragraphs: response.descripcion_prediccion.p,
+          paragraphs: response.descripcion_prediccion.p.map(fixMojibake),
+          cities: response.ciudades.map(toCityForecast),
         });
         this.loading.set(false);
       },

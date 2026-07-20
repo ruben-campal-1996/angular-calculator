@@ -44,23 +44,6 @@
 
     @if (provinceForecast(); as forecast) {
       <p class="forecast-text">{{ forecast.today }}</p>
-
-      <ul class="cities">
-        @for (city of forecast.cities; track city.name) {
-          <li class="city">
-            <img
-              class="city-icon"
-              [ngSrc]="getSkyIconPath(city.skyId)"
-              [alt]="city.skyDescription"
-              width="40"
-              height="40"
-            />
-            <span class="city-name">{{ city.name }}</span>
-            <span class="city-sky">{{ city.skyDescription }}</span>
-            <span class="city-temps">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
-          </li>
-        }
-      </ul>
     }
   } @else {
     @if (nationalForecast(); as forecast) {
@@ -69,5 +52,24 @@
         <p class="forecast-text">{{ paragraph }}</p>
       }
     }
+  }
+
+  @if (activeCities().length > 0) {
+    <ul class="cities">
+      @for (city of activeCities(); track city.name) {
+        <li class="city">
+          <img
+            class="city-icon"
+            [ngSrc]="getSkyIconPath(city.skyId)"
+            [alt]="city.skyDescription"
+            width="40"
+            height="40"
+          />
+          <span class="city-name">{{ city.name }}</span>
+          <span class="city-sky">{{ city.skyDescription }}</span>
+          <span class="city-temps">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
+        </li>
+      }
+    </ul>
   }
 </section>
