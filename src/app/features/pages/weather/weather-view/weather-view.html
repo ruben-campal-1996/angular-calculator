@@ -1,1 +1,73 @@
-<p>weather-view works!</p>
+<section class="weather" aria-label="El tiempo">
+  <h2 class="title">El tiempo</h2>
+
+  <div class="mode-toggle" role="group" aria-label="Ámbito de la previsión">
+    <button
+      type="button"
+      class="mode-button"
+      [class.mode-button--active]="mode() === 'provincia'"
+      (click)="onModeChange('provincia')"
+    >
+      Provincia
+    </button>
+    <button
+      type="button"
+      class="mode-button"
+      [class.mode-button--active]="mode() === 'nacional'"
+      (click)="onModeChange('nacional')"
+    >
+      Nacional
+    </button>
+  </div>
+
+  @if (loading()) {
+    <p class="status" role="status">Cargando previsión...</p>
+  }
+
+  @if (errorMessage(); as message) {
+    <p class="status status-error" role="alert">{{ message }}</p>
+  }
+
+  @if (mode() === 'provincia') {
+    <div class="field">
+      <label for="province-select">Provincia</label>
+      <select
+        id="province-select"
+        [value]="selectedProvinceCode()"
+        (change)="onProvinceChange($any($event.target).value)"
+      >
+        @for (province of provinces(); track province.codProv) {
+          <option [value]="province.codProv">{{ province.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (provinceForecast(); as forecast) {
+      <p class="forecast-text">{{ forecast.today }}</p>
+
+      <ul class="cities">
+        @for (city of forecast.cities; track city.name) {
+          <li class="city">
+            <img
+              class="city-icon"
+              [ngSrc]="getSkyIconPath(city.skyId)"
+              [alt]="city.skyDescription"
+              width="40"
+              height="40"
+            />
+            <span class="city-name">{{ city.name }}</span>
+            <span class="city-sky">{{ city.skyDescription }}</span>
+            <span class="city-temps">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    @if (nationalForecast(); as forecast) {
+      <p class="forecast-updated">Actualizado: {{ forecast.elaborado }}</p>
+      @for (paragraph of forecast.paragraphs; track paragraph) {
+        <p class="forecast-text">{{ paragraph }}</p>
+      }
+    }
+  }
+</section>

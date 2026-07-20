@@ -1,0 +1,23 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+}
+
+app-calculator,
+app-conversor {
+    width: 100%;
+    flex: 1 1 320px;
+    max-width: 380px;
+}
+
+@media (min-width: 768px) {
+    :host {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}
