@@ -7,7 +7,9 @@ import { FooterComponent } from "./shared/footer-component/footer-component";
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  host: {
+    class: 'flex min-h-dvh flex-col',
+  },
 })
 export class App {
   protected readonly title = signal('VUE');

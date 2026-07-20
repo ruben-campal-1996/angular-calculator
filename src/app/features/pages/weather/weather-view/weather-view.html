@@ -1,19 +1,17 @@
-<section class="weather" aria-label="El tiempo">
-  <h2 class="title">El tiempo</h2>
+<section class="mx-auto flex w-full max-w-[420px] flex-col gap-3 p-4" aria-label="El tiempo">
+  <h2 class="m-0 text-lg font-semibold">El tiempo</h2>
 
-  <div class="mode-toggle" role="group" aria-label="Ámbito de la previsión">
+  <div class="flex gap-2" role="group" aria-label="Ámbito de la previsión">
     <button
       type="button"
-      class="mode-button"
-      [class.mode-button--active]="mode() === 'provincia'"
+      [class]="modeButtonClasses(mode() === 'provincia')"
       (click)="onModeChange('provincia')"
     >
       Provincia
     </button>
     <button
       type="button"
-      class="mode-button"
-      [class.mode-button--active]="mode() === 'nacional'"
+      [class]="modeButtonClasses(mode() === 'nacional')"
       (click)="onModeChange('nacional')"
     >
       Nacional
@@ -21,18 +19,19 @@
   </div>
 
   @if (loading()) {
-    <p class="status" role="status">Cargando previsión...</p>
+    <p class="m-0 text-sm text-neutral-600" role="status">Cargando previsión...</p>
   }
 
   @if (errorMessage(); as message) {
-    <p class="status status-error" role="alert">{{ message }}</p>
+    <p class="m-0 text-sm text-tertiary-400" role="alert">{{ message }}</p>
   }
 
   @if (mode() === 'provincia') {
-    <div class="field">
-      <label for="province-select">Provincia</label>
+    <div class="flex flex-col gap-1">
+      <label class="text-sm text-neutral-600" for="province-select">Provincia</label>
       <select
         id="province-select"
+        class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
         [value]="selectedProvinceCode()"
         (change)="onProvinceChange($any($event.target).value)"
       >
@@ -43,31 +42,31 @@
     </div>
 
     @if (provinceForecast(); as forecast) {
-      <p class="forecast-text">{{ forecast.today }}</p>
+      <p class="m-0 text-sm leading-normal text-neutral-700">{{ forecast.today }}</p>
     }
   } @else {
     @if (nationalForecast(); as forecast) {
-      <p class="forecast-updated">Actualizado: {{ forecast.elaborado }}</p>
+      <p class="m-0 text-xs text-neutral-500">Actualizado: {{ forecast.elaborado }}</p>
       @for (paragraph of forecast.paragraphs; track paragraph) {
-        <p class="forecast-text">{{ paragraph }}</p>
+        <p class="m-0 text-sm leading-normal text-neutral-700">{{ paragraph }}</p>
       }
     }
   }
 
   @if (activeCities().length > 0) {
-    <ul class="cities">
+    <ul class="m-0 flex list-none flex-col gap-2 p-0">
       @for (city of activeCities(); track city.name) {
-        <li class="city">
+        <li class="grid grid-cols-[2.5rem_1fr_auto] items-center gap-3 rounded-lg bg-neutral-100 px-3 py-2">
           <img
-            class="city-icon"
+            class="row-span-2 h-10 w-10 text-primary-400"
             [ngSrc]="getSkyIconPath(city.skyId)"
             [alt]="city.skyDescription"
             width="40"
             height="40"
           />
-          <span class="city-name">{{ city.name }}</span>
-          <span class="city-sky">{{ city.skyDescription }}</span>
-          <span class="city-temps">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
+          <span class="row-start-1 font-medium">{{ city.name }}</span>
+          <span class="col-start-2 row-start-2 text-xs text-neutral-600">{{ city.skyDescription }}</span>
+          <span class="row-span-2 text-sm font-semibold whitespace-nowrap">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
         </li>
       }
     </ul>

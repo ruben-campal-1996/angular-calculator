@@ -6,11 +6,18 @@ import { getSkyIconPath } from '../../../../shared/utils/sky-icon';
 
 type WeatherMode = 'provincia' | 'nacional';
 
+const MODE_BUTTON_BASE_CLASSES =
+  'min-h-10 flex-1 cursor-pointer rounded-lg border text-sm font-medium';
+const MODE_BUTTON_ACTIVE_CLASSES = `${MODE_BUTTON_BASE_CLASSES} border-primary-300 bg-primary-300 text-white`;
+const MODE_BUTTON_INACTIVE_CLASSES = `${MODE_BUTTON_BASE_CLASSES} border-neutral-200 bg-transparent text-neutral-700`;
+
 @Component({
   selector: 'app-weather-view',
   imports: [NgOptimizedImage],
   templateUrl: './weather-view.html',
-  styleUrl: './weather-view.css',
+  host: {
+    class: 'flex flex-1 flex-col',
+  },
 })
 export class WeatherView implements OnInit {
   private readonly weatherService = inject(WeatherService);
@@ -47,5 +54,9 @@ export class WeatherView implements OnInit {
   protected onProvinceChange(codProv: string): void {
     this.selectedProvinceCode.set(codProv);
     this.weatherService.loadProvinceForecast(codProv);
+  }
+
+  protected modeButtonClasses(active: boolean): string {
+    return active ? MODE_BUTTON_ACTIVE_CLASSES : MODE_BUTTON_INACTIVE_CLASSES;
   }
 }

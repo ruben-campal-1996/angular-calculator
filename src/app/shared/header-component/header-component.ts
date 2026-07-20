@@ -6,6 +6,5 @@ import { NavHeader } from '../components/nav-header/nav-header';
   selector: 'app-header-component',
   imports: [LogoHeader, NavHeader],
   templateUrl: './header-component.html',
-  styleUrl: './header-component.css',
 })
 export class HeaderComponent {}

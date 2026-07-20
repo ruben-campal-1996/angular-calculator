@@ -1,55 +1,55 @@
-:root {
+@theme {
 
     /* ----COLORS---- */
 
-    --primary-color-100: #ADC6FF;
-    --primary-color-200: #4B8EFF;
-    --primary-color-300: #007AFF;
-    --primary-color-400: #0072F0;
-    --primary-color-500: #0072F0;
-    --primary-color-600: #005BC1;
-    --primary-color-700: #004493;
-    --primary-color-800: #002E69;
-    --primary-color-900: #001A41;
+    --color-primary-100: #ADC6FF;
+    --color-primary-200: #4B8EFF;
+    --color-primary-300: #007AFF;
+    --color-primary-400: #0072F0;
+    --color-primary-500: #0072F0;
+    --color-primary-600: #005BC1;
+    --color-primary-700: #004493;
+    --color-primary-800: #002E69;
+    --color-primary-900: #001A41;
 
-    --secondary-color-100: #C2C1FF;
-    --secondary-color-200: #A2A2FF;
-    --secondary-color-300: #A2A2FF;
-    --secondary-color-400: #6867E7;
-    --secondary-color-500: #5856D6;
-    --secondary-color-600: #4F4CCD;
-    --secondary-color-700: #3631B4;
-    --secondary-color-800: #1C0B9F;
-    --secondary-color-900: #0C006A;
+    --color-secondary-100: #C2C1FF;
+    --color-secondary-200: #A2A2FF;
+    --color-secondary-300: #A2A2FF;
+    --color-secondary-400: #6867E7;
+    --color-secondary-500: #5856D6;
+    --color-secondary-600: #4F4CCD;
+    --color-secondary-700: #3631B4;
+    --color-secondary-800: #1C0B9F;
+    --color-secondary-900: #0C006A;
 
-    --tertiary-color-100: #FFDBCC;
-    --tertiary-color-200: #FF8C55;
-    --tertiary-color-300: #EF6719;
-    --tertiary-color-400: #D75600;
-    --tertiary-color-500: #CA5100;
-    --tertiary-color-600: #A23F00;
-    --tertiary-color-700: #7C2E00;
-    --tertiary-color-800: #571E00;
-    --tertiary-color-900: #351000;
+    --color-tertiary-100: #FFDBCC;
+    --color-tertiary-200: #FF8C55;
+    --color-tertiary-300: #EF6719;
+    --color-tertiary-400: #D75600;
+    --color-tertiary-500: #CA5100;
+    --color-tertiary-600: #A23F00;
+    --color-tertiary-700: #7C2E00;
+    --color-tertiary-800: #571E00;
+    --color-tertiary-900: #351000;
 
-    --neutral-color-100: #E3E2E7;
-    --neutral-color-200: #ABABB0;
-    --neutral-color-300: #909095;
-    --neutral-color-400: #8E8E93;
-    --neutral-color-500: #76777B;
-    --neutral-color-600: #5D5E63;
-    --neutral-color-700: #46464B;
-    --neutral-color-800: #46464B;
-    --neutral-color-900: #1A1B1F;
+    --color-neutral-100: #E3E2E7;
+    --color-neutral-200: #ABABB0;
+    --color-neutral-300: #909095;
+    --color-neutral-400: #8E8E93;
+    --color-neutral-500: #76777B;
+    --color-neutral-600: #5D5E63;
+    --color-neutral-700: #46464B;
+    --color-neutral-800: #46464B;
+    --color-neutral-900: #1A1B1F;
 
     /* ----FONT SIZE---- */
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-md: 1rem;
-    --font-size-lg: 1.125rem;
-    --font-size-xl: 1.25rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-3xl: 2rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 2rem;
 
     /* ----FONT-WEIGHT---- */
     --font-weight-light: 300;
@@ -59,7 +59,7 @@
     --font-weight-bold: 700;
 
     /* ----LINE-HEIGTH---- */
-    --line-height-tight: 1.2;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.8;
+    --leading-tight: 1.2;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.8;
 }

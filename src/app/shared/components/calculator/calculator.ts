@@ -2,11 +2,13 @@ import { Component, signal } from '@angular/core';
 
 type Operator = '+' | '-' | '×' | '÷';
 
+const KEY_BASE_CLASSES =
+  'min-h-12 cursor-pointer rounded-lg border-0 text-lg font-medium focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary-300';
+
 @Component({
   selector: 'app-calculator',
   imports: [],
   templateUrl: './calculator.html',
-  styleUrl: './calculator.css',
 })
 export class Calculator {
   protected readonly display = signal('0');
@@ -15,6 +17,12 @@ export class Calculator {
   private readonly previousValue = signal<number | null>(null);
   private readonly operator = signal<Operator | null>(null);
   private readonly waitingForNewValue = signal(false);
+
+  protected readonly numberKeyClasses = `${KEY_BASE_CLASSES} bg-neutral-100 text-neutral-900 hover:bg-neutral-200`;
+  protected readonly zeroKeyClasses = `${this.numberKeyClasses} col-span-2`;
+  protected readonly clearKeyClasses = `${KEY_BASE_CLASSES} col-span-2 bg-tertiary-300 text-white hover:bg-tertiary-400`;
+  protected readonly operatorKeyClasses = `${KEY_BASE_CLASSES} bg-secondary-300 text-white hover:bg-secondary-400`;
+  protected readonly equalsKeyClasses = `${KEY_BASE_CLASSES} bg-primary-300 text-white hover:bg-primary-400`;
 
   protected inputDigit(digit: string): void {
     if (this.error()) {

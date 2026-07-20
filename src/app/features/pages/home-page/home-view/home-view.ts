@@ -7,6 +7,9 @@ import { Conversor } from "../../../../shared/components/conversor/conversor";
   selector: 'app-home-view',
   imports: [Calculator, Conversor],
   templateUrl: './home-view.html',
-  styleUrl: './home-view.css',
+  host: {
+    class:
+      'flex flex-1 flex-col items-center gap-6 px-4 py-6 md:flex-row md:flex-wrap md:items-start md:justify-center',
+  },
 })
 export class HomeView {}

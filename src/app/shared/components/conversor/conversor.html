@@ -1,30 +1,31 @@
-<section class="conversor" aria-label="Conversor de divisas">
-  <h2 class="title">Conversor de divisas</h2>
+<section class="mx-auto flex w-full max-w-80 flex-col gap-3" aria-label="Conversor de divisas">
+  <h2 class="m-0 text-lg font-semibold">Conversor de divisas</h2>
 
   @if (loading()) {
-    <p class="status" role="status">Cargando tasas de cambio...</p>
+    <p class="m-0 text-sm text-neutral-600" role="status">Cargando tasas de cambio...</p>
   }
 
   @if (errorMessage(); as message) {
-    <p class="status status-error" role="alert">{{ message }}</p>
+    <p class="m-0 text-sm text-tertiary-400" role="alert">{{ message }}</p>
   }
 
-  <div class="field">
-    <label for="amount">Cantidad</label>
+  <div class="flex flex-col gap-1">
+    <label class="text-sm text-neutral-600" for="amount">Cantidad</label>
     <input
       id="amount"
       type="number"
-      class="amount-input"
+      class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
       [value]="amount()"
       (input)="onAmountChange($any($event.target).value)"
     />
   </div>
 
-  <div class="currencies">
-    <div class="field">
-      <label for="from-currency">De</label>
+  <div class="flex items-end gap-2">
+    <div class="flex flex-1 flex-col gap-1">
+      <label class="text-sm text-neutral-600" for="from-currency">De</label>
       <select
         id="from-currency"
+        class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
         [value]="fromCurrency()"
         (change)="onFromCurrencyChange($any($event.target).value)"
       >
@@ -36,17 +37,18 @@
 
     <button
       type="button"
-      class="swap-button"
+      class="min-h-11 min-w-11 shrink-0 cursor-pointer rounded-lg border-0 bg-secondary-300 text-lg text-white hover:bg-secondary-400 focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary-300"
       aria-label="Intercambiar divisas"
       (click)="swapCurrencies()"
     >
       ⇄
     </button>
 
-    <div class="field">
-      <label for="to-currency">A</label>
+    <div class="flex flex-1 flex-col gap-1">
+      <label class="text-sm text-neutral-600" for="to-currency">A</label>
       <select
         id="to-currency"
+        class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
         [value]="toCurrency()"
         (change)="onToCurrencyChange($any($event.target).value)"
       >
@@ -57,7 +59,7 @@
     </div>
   </div>
 
-  <p class="result" role="status" aria-live="polite">
+  <p class="min-h-6 rounded-lg bg-neutral-100 px-4 py-3 text-center text-md font-medium" role="status" aria-live="polite">
     @if (convertedAmount() !== null) {
       {{ amount() }} {{ fromCurrency() }} = {{ convertedAmount() | number: '1.2-2' }} {{ toCurrency() }}
     } @else {

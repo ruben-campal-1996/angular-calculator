@@ -1,29 +1,34 @@
-<section class="calculator" aria-label="Calculadora">
-  <div class="display" role="status" aria-live="polite" [class.display-error]="error()">
+<section class="mx-auto flex w-full max-w-80 flex-col gap-3" aria-label="Calculadora">
+  <div
+    class="min-h-12 w-full rounded-lg bg-neutral-900 px-4 py-3 text-right text-2xl font-semibold text-white wrap-anywhere"
+    [class.text-tertiary-300]="error()"
+    role="status"
+    aria-live="polite"
+  >
     {{ display() }}
   </div>
 
-  <div class="keys">
-    <button type="button" class="key key-clear" (click)="clear()">CE</button>
-    <button type="button" class="key key-operator" aria-label="Dividir" (click)="setOperator('÷')">÷</button>
-    <button type="button" class="key key-operator" aria-label="Multiplicar" (click)="setOperator('×')">×</button>
+  <div class="grid grid-cols-4 gap-2">
+    <button type="button" [class]="clearKeyClasses" (click)="clear()">CE</button>
+    <button type="button" [class]="operatorKeyClasses" aria-label="Dividir" (click)="setOperator('÷')">÷</button>
+    <button type="button" [class]="operatorKeyClasses" aria-label="Multiplicar" (click)="setOperator('×')">×</button>
 
-    <button type="button" class="key" (click)="inputDigit('7')">7</button>
-    <button type="button" class="key" (click)="inputDigit('8')">8</button>
-    <button type="button" class="key" (click)="inputDigit('9')">9</button>
-    <button type="button" class="key key-operator" aria-label="Restar" (click)="setOperator('-')">−</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('7')">7</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('8')">8</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('9')">9</button>
+    <button type="button" [class]="operatorKeyClasses" aria-label="Restar" (click)="setOperator('-')">−</button>
 
-    <button type="button" class="key" (click)="inputDigit('4')">4</button>
-    <button type="button" class="key" (click)="inputDigit('5')">5</button>
-    <button type="button" class="key" (click)="inputDigit('6')">6</button>
-    <button type="button" class="key key-operator" aria-label="Sumar" (click)="setOperator('+')">+</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('4')">4</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('5')">5</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('6')">6</button>
+    <button type="button" [class]="operatorKeyClasses" aria-label="Sumar" (click)="setOperator('+')">+</button>
 
-    <button type="button" class="key" (click)="inputDigit('1')">1</button>
-    <button type="button" class="key" (click)="inputDigit('2')">2</button>
-    <button type="button" class="key" (click)="inputDigit('3')">3</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('1')">1</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('2')">2</button>
+    <button type="button" [class]="numberKeyClasses" (click)="inputDigit('3')">3</button>
 
-    <button type="button" class="key key-zero" (click)="inputDigit('0')">0</button>
-    <button type="button" class="key" aria-label="Coma decimal" (click)="inputDecimal()">.</button>
-    <button type="button" class="key key-equals" aria-label="Igual" (click)="calculate()">=</button>
+    <button type="button" [class]="zeroKeyClasses" (click)="inputDigit('0')">0</button>
+    <button type="button" [class]="numberKeyClasses" aria-label="Coma decimal" (click)="inputDecimal()">.</button>
+    <button type="button" [class]="equalsKeyClasses" aria-label="Igual" (click)="calculate()">=</button>
   </div>
 </section>

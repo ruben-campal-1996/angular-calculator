@@ -1,16 +1,16 @@
-<footer class="site-footer">
+<footer class="flex flex-col items-center gap-4 border-t border-neutral-700 bg-neutral-900 px-8 py-6 text-center min-[640px]:flex-row min-[640px]:justify-between">
   <app-logo-header />
 
-  <nav class="footer-nav" aria-label="Enlaces del pie de página">
-    <ul class="footer-nav__list">
+  <nav aria-label="Enlaces del pie de página">
+    <ul class="flex list-none items-center gap-4">
       <li>
-        <a class="footer-nav__link" routerLink="/calculator" routerLinkActive="footer-nav__link--active">Calculator</a>
+        <a [class]="linkClasses" routerLink="/calculator" [routerLinkActive]="activeClass">Calculator</a>
       </li>
       <li>
-        <a class="footer-nav__link" routerLink="/weather" routerLinkActive="footer-nav__link--active">Weather</a>
+        <a [class]="linkClasses" routerLink="/weather" [routerLinkActive]="activeClass">Weather</a>
       </li>
     </ul>
   </nav>
 
-  <p class="footer-copyright">© 2026 CalcuWeather. Todos los derechos reservados.</p>
+  <p class="m-0 text-xs text-neutral-400">© 2026 CalcuWeather. Todos los derechos reservados.</p>
 </footer>

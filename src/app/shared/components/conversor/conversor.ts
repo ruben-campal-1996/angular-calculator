@@ -7,7 +7,6 @@ import { CurrencyCode, CurrencyService } from '../../services/currency/currency'
   selector: 'app-conversor',
   imports: [DecimalPipe],
   templateUrl: './conversor.html',
-  styleUrl: './conversor.css',
 })
 export class Conversor implements OnInit {
   private readonly currencyService = inject(CurrencyService);
