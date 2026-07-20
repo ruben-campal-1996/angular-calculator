@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
+import { routes } from './app.routes';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter(routes)],
     }).compileComponents();
   });
 
@@ -14,12 +17,12 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render the header, home view and footer', async () => {
+  it('should render the header, footer and a router outlet for the routed view', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-header-component')).toBeTruthy();
-    expect(compiled.querySelector('app-home-view')).toBeTruthy();
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
     expect(compiled.querySelector('app-footer-component')).toBeTruthy();
   });
 });

@@ -12,6 +12,12 @@ body {
     font-family: var(--font-family-body);
 }
 
+/* The routed component's host element belongs to its own view
+   encapsulation, so this can't live in app.css's scoped stylesheet. */
+router-outlet + * {
+    flex: 1;
+}
+
 h1,h2,h3,h4,h5,h6 {
     font-family: var(--font-family-heading);
 }

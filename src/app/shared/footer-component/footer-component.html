@@ -1,1 +1,16 @@
-<p>footer-component works!</p>
+<footer class="site-footer">
+  <app-logo-header />
+
+  <nav class="footer-nav" aria-label="Enlaces del pie de página">
+    <ul class="footer-nav__list">
+      <li>
+        <a class="footer-nav__link" routerLink="/calculator" routerLinkActive="footer-nav__link--active">Calculator</a>
+      </li>
+      <li>
+        <a class="footer-nav__link" routerLink="/weather" routerLinkActive="footer-nav__link--active">Weather</a>
+      </li>
+    </ul>
+  </nav>
+
+  <p class="footer-copyright">© 2026 CalcuWeather. Todos los derechos reservados.</p>
+</footer>

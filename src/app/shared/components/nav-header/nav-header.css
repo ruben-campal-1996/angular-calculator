@@ -25,3 +25,7 @@
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+.site-nav__link--active {
+  color: var(--primary-color-200);
+}
