@@ -26,11 +26,10 @@
       <select
         id="from-currency"
         class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
-        [value]="fromCurrency()"
         (change)="onFromCurrencyChange($any($event.target).value)"
       >
         @for (currency of currencies; track currency) {
-          <option [value]="currency">{{ currency }}</option>
+          <option [value]="currency" [selected]="currency === fromCurrency()">{{ currency }}</option>
         }
       </select>
     </div>
@@ -49,11 +48,10 @@
       <select
         id="to-currency"
         class="min-h-11 w-full rounded-lg border border-neutral-200 px-3 py-2 text-md"
-        [value]="toCurrency()"
         (change)="onToCurrencyChange($any($event.target).value)"
       >
         @for (currency of currencies; track currency) {
-          <option [value]="currency">{{ currency }}</option>
+          <option [value]="currency" [selected]="currency === toCurrency()">{{ currency }}</option>
         }
       </select>
     </div>

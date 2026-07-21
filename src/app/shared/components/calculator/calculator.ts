@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 
 type Operator = '+' | '-' | '×' | '÷';
 
 const KEY_BASE_CLASSES =
-  'min-h-12 cursor-pointer rounded-lg border-0 text-lg font-medium focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary-300';
+  'min-h-12 cursor-pointer rounded-lg border-0 text-lg font-medium focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary-300 disabled:cursor-not-allowed disabled:opacity-50';
 
 @Component({
   selector: 'app-calculator',
@@ -23,6 +23,10 @@ export class Calculator {
   protected readonly clearKeyClasses = `${KEY_BASE_CLASSES} col-span-2 bg-tertiary-300 text-white hover:bg-tertiary-400`;
   protected readonly operatorKeyClasses = `${KEY_BASE_CLASSES} bg-secondary-300 text-white hover:bg-secondary-400`;
   protected readonly equalsKeyClasses = `${KEY_BASE_CLASSES} bg-primary-300 text-white hover:bg-primary-400`;
+  protected readonly memoryKeyClasses = `${KEY_BASE_CLASSES} bg-neutral-200 text-neutral-900 hover:bg-neutral-300`;
+
+  protected readonly memoryValue = signal<number | null>(null);
+  protected readonly hasMemory = computed(() => this.memoryValue() !== null);
 
   protected inputDigit(digit: string): void {
     if (this.error()) {
@@ -102,6 +106,28 @@ export class Calculator {
     this.operator.set(null);
     this.waitingForNewValue.set(false);
     this.error.set(false);
+  }
+
+  protected memoryAdd(): void {
+    if (this.error()) {
+      return;
+    }
+
+    this.memoryValue.set(this.round((this.memoryValue() ?? 0) + Number(this.display())));
+  }
+
+  protected memoryRecall(): void {
+    if (!this.hasMemory()) {
+      return;
+    }
+
+    this.display.set(String(this.memoryValue()));
+    this.error.set(false);
+    this.waitingForNewValue.set(true);
+  }
+
+  protected memoryClear(): void {
+    this.memoryValue.set(null);
   }
 
   private compute(a: number, b: number, operator: Operator): number | null {

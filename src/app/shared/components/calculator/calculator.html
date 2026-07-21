@@ -1,11 +1,52 @@
-<section class="mx-auto flex w-full max-w-80 flex-col gap-3" aria-label="Calculadora">
+<section class="relative mx-auto flex w-full max-w-80 flex-col gap-3" aria-label="Calculadora">
+  @if (hasMemory()) {
+    <div
+      class="pointer-events-none absolute -top-2 -right-2 min-h-6 rounded-full bg-secondary-300 px-2 py-0.5 text-xs font-semibold whitespace-nowrap text-white shadow"
+      role="status"
+      aria-live="polite"
+      data-testid="memory-badge"
+    >
+      M: {{ memoryValue() }}
+    </div>
+  }
+
   <div
     class="min-h-12 w-full rounded-lg bg-neutral-900 px-4 py-3 text-right text-2xl font-semibold text-white wrap-anywhere"
     [class.text-tertiary-300]="error()"
     role="status"
     aria-live="polite"
+    data-testid="display"
   >
     {{ display() }}
+  </div>
+
+  <div class="grid grid-cols-3 gap-2" role="group" aria-label="Memoria">
+    <button
+      type="button"
+      [class]="memoryKeyClasses"
+      [disabled]="!hasMemory()"
+      aria-label="Borrar memoria"
+      (click)="memoryClear()"
+    >
+      MC
+    </button>
+    <button
+      type="button"
+      [class]="memoryKeyClasses"
+      [disabled]="!hasMemory()"
+      aria-label="Recuperar memoria"
+      (click)="memoryRecall()"
+    >
+      MR
+    </button>
+    <button
+      type="button"
+      [class]="memoryKeyClasses"
+      aria-label="Sumar a memoria"
+      (click)="memoryAdd()"
+    >
+      M+
+    </button>
   </div>
 
   <div class="grid grid-cols-4 gap-2">

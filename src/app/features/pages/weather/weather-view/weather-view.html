@@ -1,7 +1,10 @@
-<section class="mx-auto flex w-full max-w-[420px] flex-col gap-3 p-4" aria-label="El tiempo">
-  <h2 class="m-0 text-lg font-semibold">El tiempo</h2>
+<section
+  class="mx-auto flex w-full max-w-[420px] flex-col gap-3 p-4 md:max-w-3xl md:gap-4 md:p-6 lg:max-w-5xl lg:p-8"
+  aria-label="El tiempo"
+>
+  <h2 class="m-0 text-lg font-semibold md:text-xl">El tiempo</h2>
 
-  <div class="flex gap-2" role="group" aria-label="Ámbito de la previsión">
+  <div class="flex gap-2 md:max-w-xs" role="group" aria-label="Ámbito de la previsión">
     <button
       type="button"
       [class]="modeButtonClasses(mode() === 'provincia')"
@@ -27,7 +30,7 @@
   }
 
   @if (mode() === 'provincia') {
-    <div class="flex flex-col gap-1">
+    <div class="flex flex-col gap-1 md:max-w-xs">
       <label class="text-sm text-neutral-600" for="province-select">Provincia</label>
       <select
         id="province-select"
@@ -42,31 +45,33 @@
     </div>
 
     @if (provinceForecast(); as forecast) {
-      <p class="m-0 text-sm leading-normal text-neutral-700">{{ forecast.today }}</p>
+      <p class="m-0 max-w-prose text-sm leading-normal text-neutral-700 md:text-base">{{ forecast.today }}</p>
     }
   } @else {
     @if (nationalForecast(); as forecast) {
       <p class="m-0 text-xs text-neutral-500">Actualizado: {{ forecast.elaborado }}</p>
       @for (paragraph of forecast.paragraphs; track paragraph) {
-        <p class="m-0 text-sm leading-normal text-neutral-700">{{ paragraph }}</p>
+        <p class="m-0 max-w-prose text-sm leading-normal text-neutral-700 md:text-base">{{ paragraph }}</p>
       }
     }
   }
 
   @if (activeCities().length > 0) {
-    <ul class="m-0 flex list-none flex-col gap-2 p-0">
+    <ul class="m-0 grid list-none grid-cols-1 gap-2 p-0 md:grid-cols-2 md:gap-3 lg:grid-cols-3">
       @for (city of activeCities(); track city.name) {
         <li class="grid grid-cols-[2.5rem_1fr_auto] items-center gap-3 rounded-lg bg-neutral-100 px-3 py-2">
           <img
-            class="row-span-2 h-10 w-10 text-primary-400"
+            class="h-10 w-10 text-primary-400"
             [ngSrc]="getSkyIconPath(city.skyId)"
             [alt]="city.skyDescription"
             width="40"
             height="40"
           />
-          <span class="row-start-1 font-medium">{{ city.name }}</span>
-          <span class="col-start-2 row-start-2 text-xs text-neutral-600">{{ city.skyDescription }}</span>
-          <span class="row-span-2 text-sm font-semibold whitespace-nowrap">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
+          <div class="flex min-w-0 flex-col justify-center">
+            <span class="truncate font-medium">{{ city.name }}</span>
+            <span class="truncate text-xs text-neutral-600">{{ city.skyDescription }}</span>
+          </div>
+          <span class="text-sm font-semibold whitespace-nowrap">{{ city.temperatureMin }}° / {{ city.temperatureMax }}°</span>
         </li>
       }
     </ul>
