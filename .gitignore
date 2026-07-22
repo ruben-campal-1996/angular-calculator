@@ -47,6 +47,10 @@ Thumbs.db
 .agents/
 .codex/
 .continue/
-.github/
+.github/*
+!.github/workflows/
 LLM_SETUP.md
 AGENTS.md
+
+# Secrets (usar environment.example.ts como plantilla)
+/src/environments/environment.ts
