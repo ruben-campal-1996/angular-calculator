@@ -4,10 +4,22 @@
   <nav aria-label="Enlaces del pie de página">
     <ul class="flex list-none items-center gap-4">
       <li>
-        <a [class]="linkClasses" routerLink="/calculator" [routerLinkActive]="activeClass">Calculator</a>
+        <a
+          [class]="linkClasses"
+          routerLink="/calculator"
+          [routerLinkActive]="activeClass"
+          ariaCurrentWhenActive="page"
+          >Calculator</a
+        >
       </li>
       <li>
-        <a [class]="linkClasses" routerLink="/weather" [routerLinkActive]="activeClass">Weather</a>
+        <a
+          [class]="linkClasses"
+          routerLink="/weather"
+          [routerLinkActive]="activeClass"
+          ariaCurrentWhenActive="page"
+          >Weather</a
+        >
       </li>
     </ul>
   </nav>

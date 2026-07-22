@@ -57,7 +57,12 @@
     </div>
   </div>
 
-  <p class="min-h-6 rounded-lg bg-neutral-100 px-4 py-3 text-center text-md font-medium" role="status" aria-live="polite">
+  <p
+    class="min-h-6 rounded-lg bg-neutral-100 px-4 py-3 text-center text-md font-medium"
+    role="status"
+    aria-live="polite"
+    data-testid="conversion-result"
+  >
     @if (convertedAmount() !== null) {
       {{ amount() }} {{ fromCurrency() }} = {{ convertedAmount() | number: '1.2-2' }} {{ toCurrency() }}
     } @else {
