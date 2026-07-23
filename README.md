@@ -75,7 +75,7 @@ Enlace a la aplicación desplegada en GitHub Pages
 ---
 
 
-angular-calculator
+```angular-calculator
 ├─ .angular                          # Caché interna del CLI de Angular (no tocar)
 ├─ .claude
 │  └─ settings.local.json            # Config local de Claude (ignorada por git)
@@ -188,3 +188,4 @@ angular-calculator
 ├─ tsconfig.app.json                 # Config TypeScript para el bundle de producción
 ├─ tsconfig.json                     # Config TypeScript base con opciones estrictas
 └─ tsconfig.spec.json                # Config TypeScript para los tests
+```
