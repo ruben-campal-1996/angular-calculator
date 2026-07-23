@@ -80,13 +80,29 @@ angular-calculator
 ├─ .claude
 │  └─ settings.local.json            # Config local de Claude (ignorada por git)
 ├─ .editorconfig                     # Reglas de formato del editor (indentación, charset…)
+├─ .github
+│  └─ workflows
+│     └─ deploy.yml                  # CI/CD: despliegue a GitHub Pages
+├─ .gitignore                        # Archivos y carpetas excluidos del control de versiones
 ├─ .postcssrc.json                   # Config de PostCSS para integrar Tailwind CSS v4
 ├─ .prettierrc                       # Reglas de formateo automático de código
+├─ .vscode
+│  ├─ extensions.json                # Extensiones de VS Code recomendadas
+│  ├─ launch.json                    # Configuración de depuración
+│  └─ tasks.json                     # Tareas predefinidas del editor
 ├─ angular.json                      # Config central del CLI: build, serve, test
 ├─ Angular_learning.md               # Notas de aprendizaje Angular del desarrollador
 ├─ CLAUDE.md                         # Instrucciones del proyecto para el agente de IA
+├─ e2e                                # Tests end-to-end con Playwright
+│  ├─ calculator.spec.ts             # E2E: flujo completo de la calculadora
+│  ├─ conversor.spec.ts              # E2E: flujo del conversor de divisas
+│  ├─ fixtures
+│  │  └─ api-mocks.ts                # Mocks de las respuestas de las APIs externas
+│  ├─ navigation.spec.ts             # E2E: navegación entre vistas
+│  └─ weather.spec.ts                # E2E: flujo de la vista del tiempo
 ├─ package-lock.json                 # Árbol de dependencias exacto (reproducibilidad)
 ├─ package.json                      # Dependencias y scripts npm del proyecto
+├─ playwright.config.ts              # Config de Playwright para los tests e2e
 ├─ project-plan.md                   # Plan de fases del proyecto (actualmente desactualizado)
 ├─ public
 │  ├─ assets
@@ -105,7 +121,7 @@ angular-calculator
 │  ├─ app
 │  │  ├─ app.config.ts               # Bootstrap: registra Router, HttpClient y error listeners
 │  │  ├─ app.html                    # Shell raíz: header + <router-outlet> + footer
-│  │  ├─ app.routes.ts               # Tabla de rutas de la aplicación (actualmente vacía)
+│  │  ├─ app.routes.ts               # Tabla de rutas: calculator (por defecto) y weather, con lazy loading
 │  │  ├─ app.spec.ts                 # Test: verifica que header, router-outlet y footer renderizan
 │  │  ├─ app.ts                      # Componente raíz que compone el shell de la aplicación
 │  │  ├─ features
@@ -148,12 +164,16 @@ angular-calculator
 │  │     │  └─ header-component.ts   # Componente contenedor que compone LogoHeader + NavHeader
 │  │     ├─ services                 # ← AQUÍ ESTÁN LAS LLAMADAS A LAS APIs
 │  │     │  ├─ currency
+│  │     │  │  ├─ currency.spec.ts   # Test unitario del servicio de divisas
 │  │     │  │  └─ currency.ts        # 🌐 API CurrencyFreaks: loadRates() + convert() entre EUR/USD/JPY
 │  │     │  └─ weather
+│  │     │     ├─ weather.spec.ts    # Test unitario del servicio del tiempo
 │  │     │     └─ weather.ts         # 🌐 API el-tiempo.net: loadProvinces(), loadProvinceForecast(), loadNationalForecast()
 │  │     └─ utils                    # Funciones puras auxiliares (sin estado, sin Angular)
+│  │        ├─ fix-mojibake.spec.ts  # Test unitario de fix-mojibake
 │  │        ├─ fix-mojibake.ts       # Corrige texto mal codificado que devuelve la API del tiempo
 │  │        ├─ site-nav-link-classes.ts # Constante con las clases Tailwind de los enlaces del nav
+│  │        ├─ sky-icon.spec.ts      # Test unitario de sky-icon
 │  │        └─ sky-icon.ts           # Mapea el código de cielo de la API al nombre del SVG correcto
 │  ├─ environments
 │  │  └─ environment.example.ts      # 🔑 Plantilla de API keys: CurrencyFreaks + el-tiempo.net (sin datos reales)

@@ -1,9 +1,17 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 
 type Operator = '+' | '-' | '×' | '÷';
 
 const KEY_BASE_CLASSES =
   'min-h-12 cursor-pointer rounded-lg border-0 text-lg font-medium focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-primary-300 disabled:cursor-not-allowed disabled:opacity-50';
+
+const MEMORY_STORAGE_KEY = 'calculator-memory';
+
+function readStoredMemory(): number | null {
+  const raw = localStorage.getItem(MEMORY_STORAGE_KEY);
+  const parsed = raw === null ? NaN : Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 @Component({
   selector: 'app-calculator',
@@ -25,8 +33,19 @@ export class Calculator {
   protected readonly equalsKeyClasses = `${KEY_BASE_CLASSES} bg-primary-300 text-white hover:bg-primary-400`;
   protected readonly memoryKeyClasses = `${KEY_BASE_CLASSES} bg-neutral-200 text-neutral-900 hover:bg-neutral-300`;
 
-  protected readonly memoryValue = signal<number | null>(null);
+  protected readonly memoryValue = signal<number | null>(readStoredMemory());
   protected readonly hasMemory = computed(() => this.memoryValue() !== null);
+
+  constructor() {
+    effect(() => {
+      const value = this.memoryValue();
+      if (value === null) {
+        localStorage.removeItem(MEMORY_STORAGE_KEY);
+      } else {
+        localStorage.setItem(MEMORY_STORAGE_KEY, String(value));
+      }
+    });
+  }
 
   protected inputDigit(digit: string): void {
     if (this.error()) {

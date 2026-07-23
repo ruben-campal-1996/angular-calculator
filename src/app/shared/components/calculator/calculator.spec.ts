@@ -7,6 +7,8 @@ describe('Calculator', () => {
   let fixture: ComponentFixture<Calculator>;
 
   beforeEach(async () => {
+    localStorage.clear();
+
     await TestBed.configureTestingModule({
       imports: [Calculator],
     }).compileComponents();
@@ -164,6 +166,23 @@ describe('Calculator', () => {
       expect(getMemoryBadgeText()).toBeNull();
       expect(getButton('MR').disabled).toBe(true);
       expect(getButton('MC').disabled).toBe(true);
+    });
+
+    it('el valor guardado sobrevive a recargar la vista (localStorage)', async () => {
+      press('7', 'M+');
+
+      const newFixture = TestBed.createComponent(Calculator);
+      newFixture.detectChanges();
+      await newFixture.whenStable();
+
+      const badge = newFixture.nativeElement.querySelector('[data-testid="memory-badge"]');
+      expect(badge?.textContent.trim()).toBe('M: 7');
+    });
+
+    it('MC borra también el valor persistido en localStorage', () => {
+      press('7', 'M+', 'MC');
+
+      expect(localStorage.getItem('calculator-memory')).toBeNull();
     });
   });
 });

@@ -52,6 +52,51 @@ La lógica de "calculadora de escritorio" clásica (con memoria de un solo paso,
 
 El teclado se construyó como una rejilla CSS de 4 columnas donde la tecla `CE` y la tecla `0` ocupan 2 columnas (`col-span-2`), reproduciendo la disposición típica de una calculadora física.
 
+### La memoria (M+/MR/MC) sobrevive a recargar la página y a cambiar de vista
+
+La primera versión de `memoryValue` era un `signal<number | null>(null)` normal, exactamente igual que los demás. Funcionaba perfectamente... hasta que se probaba un caso muy concreto: guardar algo en memoria con `M+`, ir a la vista de El Tiempo y volver a la calculadora, y encontrarse la memoria vacía.
+
+La causa es la misma idea de la sección 1: `Calculator` solo existe dentro de la ruta `/calculator` (colgando de `HomeView`). Cuando el router navega a `/weather`, Angular no "esconde" `HomeView`, lo **destruye** — y con él, su instancia de `Calculator` y todos sus signals. Al volver a `/calculator`, el router crea una instancia nueva desde cero, con `memoryValue` otra vez a `null`. Recargar la página (F5) tiene el mismo efecto por una razón más obvia: se reinicia todo el proceso de JavaScript, así que cualquier signal en memoria RAM desaparece sin más.
+
+Un signal, por sí mismo, solo vive mientras vive su componente. Para que un dato sobreviva a que su componente se destruya, tiene que guardarse en algún sitio que exista *fuera* del ciclo de vida de Angular — aquí, `localStorage` del navegador, que persiste tanto entre navegaciones como entre recargas de página (solo se borra si el usuario limpia los datos del sitio).
+
+La solución fue enganchar el signal existente a `localStorage` en dos direcciones, sin cambiar en nada la API pública del componente (`memoryAdd`, `memoryRecall`, `memoryClear` siguen igual):
+
+```ts
+const MEMORY_STORAGE_KEY = 'calculator-memory';
+
+function readStoredMemory(): number | null {
+  const raw = localStorage.getItem(MEMORY_STORAGE_KEY);
+  const parsed = raw === null ? NaN : Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export class Calculator {
+  protected readonly memoryValue = signal<number | null>(readStoredMemory());
+
+  constructor() {
+    effect(() => {
+      const value = this.memoryValue();
+      if (value === null) {
+        localStorage.removeItem(MEMORY_STORAGE_KEY);
+      } else {
+        localStorage.setItem(MEMORY_STORAGE_KEY, String(value));
+      }
+    });
+  }
+}
+```
+
+Dos detalles que vale la pena explicar:
+
+- **Lectura al arrancar, no en `ngOnInit`**: `memoryValue` se inicializa llamando a `readStoredMemory()` directamente como valor inicial del signal, en el propio campo de la clase. Esto se puede hacer porque los campos de un componente se evalúan durante la construcción, que en Angular ya es un "contexto de inyección" válido — no hace falta esperar a ningún hook del ciclo de vida para leer algo síncrono como `localStorage`.
+- **Escritura con `effect()`, no dentro de cada método**: en vez de añadir un `localStorage.setItem(...)` manualmente al final de `memoryAdd()`, `memoryClear()` y donde haga falta (fácil de olvidar en el futuro si se añade una cuarta forma de tocar la memoria), se usa un único `effect()` que **reacciona** a cualquier cambio de `memoryValue()`, sea cual sea el método que lo causó. Es el mismo principio que ya se aplicaba con `computed()` en el conversor (sección 3): declarar la relación una vez y dejar que Angular se encargue de mantenerla sincronizada, en vez de acordarse de repetirla en cada sitio.
+- **`removeItem` en vez de guardar `"null"`**: cuando `MC` deja `memoryValue` en `null`, el efecto borra la clave de `localStorage` en vez de guardar el string `"null"`. Así, `readStoredMemory()` no necesita distinguir entre "la clave no existe" y "la clave vale la cadena null" — simplemente `getItem` devuelve `null` en ambos casos y el `Number(null → NaN)` cae en la misma rama.
+
+Esto no necesitó ningún guard especial de tipo "¿existe `window`?" porque el proyecto no usa Angular SSR (no hay builder de servidor en `angular.json`) — es una SPA pura que solo corre en el navegador, así que `localStorage` está garantizado disponible en cuanto el componente se construye.
+
+Un efecto secundario a tener en cuenta en los tests: como `localStorage` es compartido por *todas* las instancias del componente dentro del mismo test runner (no se resetea solo), los tests de `calculator.spec.ts` ahora empiezan con `localStorage.clear()` en el `beforeEach` — si no, el valor guardado por un test se colaría en el siguiente.
+
 ---
 
 ## 3. El conversor de divisas: separar "pedir datos" de "mostrar datos"
@@ -83,14 +128,40 @@ Cuando llegó la API key real de currencyfreaks.com, el primer instinto sería p
 
 La solución fue partir el archivo en dos:
 - `environment.example.ts` — con un placeholder (`'YOUR_API_KEY_HERE'`), **sí** se sube a Git. Sirve de plantilla para cualquiera que clone el repo.
-- `environment.ts` — con la key real, añadido a `.gitignore` para que Git lo ignore por completo.
+- `environment.ts` — con la key real, añadido a `.gitignore` para que Git lo ignore por completo. **No existe en el repositorio ni se crea a mano en local para producción** — lo genera el propio pipeline de despliegue (ver más abajo). En local, cada desarrollador copia `environment.example.ts` a `environment.ts` y pone ahí su propia key para poder trabajar contra la API real.
 
 ```
 # .gitignore
 /src/environments/environment.ts
 ```
 
-Angular no necesita ninguna configuración especial para esto: simplemente importa `environment.ts` como cualquier otro módulo TypeScript, y ese archivo existe en el disco (porque lo creamos a mano) aunque Git no lo trackee.
+Angular no necesita ninguna configuración especial para esto: `currency.ts` y `weather.ts` simplemente hacen `import { environment } from '../../../../environments/environment'` como si fuera un módulo TypeScript cualquiera. Angular no sabe ni le importa de dónde salió ese archivo en disco — solo que exista en el momento de compilar.
+
+### Quién crea `environment.ts` en producción: `.github/workflows/deploy.yml`
+
+Al principio `environment.ts` se creaba a mano en local y ya está — pero eso solo cubre el desarrollo local, no dice nada de cómo se despliega la app a GitHub Pages sin subir la key al repo. La respuesta es que **el archivo se genera dentro del propio workflow de CI**, justo antes de compilar:
+
+```yaml
+# .github/workflows/deploy.yml
+- name: Generar environment.ts desde secrets
+  run: |
+    cat > src/environments/environment.ts <<EOF
+    export const environment = {
+      currencyFreaksApiKey: '${{ secrets.CURRENCYFREAKS_API_KEY }}',
+      currencyFreaksApiUrl: 'https://api.currencyfreaks.com/v2.0/rates/latest',
+      currencyElTiempoNetNacional: 'https://api.el-tiempo.net/json/v3/general',
+      currencyElTiempoNetListaProvincias: 'https://api.el-tiempo.net/json/v3/provincias',
+      currencyElTiempoNetTiempoProvincia: 'https://api.el-tiempo.net/json/v3/provincias/[CODPROV]',
+    };
+    EOF
+
+- run: npm ci
+- run: npx ng build --base-href /angular-calculator/
+```
+
+La key real vive como **GitHub Secret** (`CURRENCYFREAKS_API_KEY`), configurado en los ajustes del repositorio, no en ningún archivo versionado. El paso de "Generar environment.ts" escribe el archivo en el runner de GitHub Actions, en un disco efímero que desaparece al terminar el job — nunca se commitea, nunca queda en el historial de Git. Justo después, `ng build` encuentra el archivo en disco y el `import { environment } from '.../environment'` de `currency.ts`/`weather.ts` se resuelve con normalidad, exactamente igual que en local.
+
+Esto tiene una consecuencia importante que vale la pena remarcar: **los imports de `environment` en `currency.ts` y `weather.ts` siguen siendo necesarios**, no son código muerto ni un resto de una etapa anterior. Sin ellos habría que hardcodear las URLs y (peor) la API key directamente en el código fuente, que es justo lo que este mecanismo de dos archivos + generación en CI está evitando.
 
 ---
 
